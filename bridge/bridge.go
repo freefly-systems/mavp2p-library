@@ -1,4 +1,6 @@
-package bridge
+//go:build (android || darwin) && !cli
+
+package main
 
 /*
 #include <stdint.h>
