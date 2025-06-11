@@ -6,13 +6,14 @@ import (
 
 	"github.com/bluenviron/gomavlib/v3"
 	"github.com/bluenviron/gomavlib/v3/pkg/dialects/common"
+	"github.com/freefly-systems/mavp2p-library/router"
 	"github.com/stretchr/testify/require"
 )
 
 func TestBroadcast(t *testing.T) {
-	p, err := newProgram([]string{"tcps:0.0.0.0:6666"})
+	p, err := router.NewProgram([]string{"tcps:0.0.0.0:6666"})
 	require.NoError(t, err)
-	defer p.close()
+	defer p.Close()
 
 	pub := &gomavlib.Node{
 		Endpoints: []gomavlib.EndpointConf{
@@ -74,9 +75,9 @@ func TestBroadcast(t *testing.T) {
 }
 
 func TestTarget(t *testing.T) {
-	p, err := newProgram([]string{"tcps:0.0.0.0:6666"})
+	p, err := router.NewProgram([]string{"tcps:0.0.0.0:6666"})
 	require.NoError(t, err)
-	defer p.close()
+	defer p.Close()
 
 	pub := &gomavlib.Node{
 		Endpoints: []gomavlib.EndpointConf{
@@ -179,9 +180,9 @@ func TestTarget(t *testing.T) {
 }
 
 func TestTargetNotFound(t *testing.T) {
-	p, err := newProgram([]string{"tcps:0.0.0.0:6666"})
+	p, err := router.NewProgram([]string{"tcps:0.0.0.0:6666"})
 	require.NoError(t, err)
-	defer p.close()
+	defer p.Close()
 
 	pub := &gomavlib.Node{
 		Endpoints: []gomavlib.EndpointConf{

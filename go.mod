@@ -1,4 +1,4 @@
-module github.com/bluenviron/mavp2p
+module github.com/freefly-systems/mavp2p-library
 
 go 1.24.0
 
