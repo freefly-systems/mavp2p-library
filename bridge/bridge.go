@@ -7,6 +7,8 @@ package main
 */
 import "C"
 import (
+	"fmt"
+	"os"
 	"sync"
 	"unsafe"
 
@@ -17,6 +19,48 @@ var (
 	rtr *router.Program
 	mu  sync.Mutex
 )
+
+//export TestConnection
+func TestConnection() C.int {
+	return 42 // Simple test - just return a known value
+}
+
+//export AddNumbers
+func AddNumbers(a C.int, b C.int) C.int {
+	return a + b // Another simple test
+}
+
+//export StartDefaultRouter
+func StartDefaultRouter() C.int {
+	// Log to Android logcat
+	fmt.Fprintf(os.Stderr, "Starting default router\n")
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	if rtr != nil {
+		fmt.Fprintf(os.Stderr, "Router already running\n")
+		return -1 // already running
+	}
+
+	// Default endpoints: UDP server on 14550 and TCP server on 5760
+	args := []string{
+		"udps:0.0.0.0:14550",
+		"udpc:localhost:6001",
+	}
+
+	fmt.Fprintf(os.Stderr, "Initializing router with endpoints: %v\n", args)
+
+	p, err := router.NewProgram(args)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to start router: %v\n", err)
+		return -2
+	}
+
+	fmt.Fprintf(os.Stderr, "Router started successfully\n")
+	rtr = p
+	return 0
+}
 
 //export StartRouter
 func StartRouter(argc C.int, argv **C.char) C.int {

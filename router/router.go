@@ -173,6 +173,7 @@ type Program struct {
 }
 
 func NewProgram(args []string) (*Program, error) {
+	fmt.Println("NewProgram", args)
 	parser, err := kong.New(&cli,
 		kong.Description("mavp2p "+version),
 		kong.UsageOnError(),
@@ -209,21 +210,31 @@ func NewProgram(args []string) (*Program, error) {
 		return nil, err
 	}
 
+	// no error yet
+
 	kongCtx, err := parser.Parse(args)
 	if err != nil {
 		return nil, err
 	}
+
+	// no error yet
 
 	if cli.Version {
 		fmt.Println(version)
 		os.Exit(0)
 	}
 
+	// no error yet
+
+	// added to not get kongCtx unused error
+	kongCtx.PrintUsage(true)
 	// print usage if no args are provided
-	if len(os.Args) <= 1 {
-		kongCtx.PrintUsage(false) //nolint:errcheck
-		os.Exit(1)
-	}
+	// if len(os.Args) <= 1 {
+	// 	kongCtx.PrintUsage(false) //nolint:errcheck
+	// 	os.Exit(1)
+	// }
+
+	// ERROR
 
 	endpointConfs, err := generateEndpointConfs(cli.Endpoints)
 	if err != nil {
