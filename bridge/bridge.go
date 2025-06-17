@@ -46,7 +46,8 @@ func StartDefaultRouter() C.int {
 	// Default endpoints: UDP server on 14550 and TCP server on 5760
 	args := []string{
 		"udps:0.0.0.0:14550",
-		"udpc:localhost:6001",
+		"udpc:localhost:14551",
+		"udpc:localhost:14552",
 	}
 
 	fmt.Fprintf(os.Stderr, "Initializing router with endpoints: %v\n", args)
