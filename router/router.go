@@ -210,31 +210,20 @@ func NewProgram(args []string) (*Program, error) {
 		return nil, err
 	}
 
-	// no error yet
-
-	kongCtx, err := parser.Parse(args)
+	_, err = parser.Parse(args)
 	if err != nil {
 		return nil, err
 	}
-
-	// no error yet
 
 	if cli.Version {
 		fmt.Println(version)
 		os.Exit(0)
 	}
 
-	// no error yet
-
-	// added to not get kongCtx unused error
-	kongCtx.PrintUsage(true)
-	// print usage if no args are provided
-	// if len(os.Args) <= 1 {
-	// 	kongCtx.PrintUsage(false) //nolint:errcheck
-	// 	os.Exit(1)
-	// }
-
-	// ERROR
+	// Check if no arguments were provided (args would be empty or contain no endpoints)
+	if len(args) == 0 {
+		return nil, fmt.Errorf("no arguments provided, use --help for usage information")
+	}
 
 	endpointConfs, err := generateEndpointConfs(cli.Endpoints)
 	if err != nil {
